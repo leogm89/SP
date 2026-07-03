@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soil Passport | Mercado de Bonos de Carbono</title>
+<style>
+  :root{
+    --forest-950:#07130d;
+    --forest-900:#0b2018;
+    --forest-800:#0f2e21;
+    --forest-700:#15442f;
+    --forest-600:#1c5c3f;
+    --forest-500:#237a51;
+    --green-500:#2f9e5b;
+    --green-400:#3fbf72;
+    --green-300:#6fd694;
+    --mint-100:#eafbf1;
+    --paper:#f6f8f6;
+    --ink-900:#0d1a13;
+    --ink-700:#33463b;
+    --ink-500:#5c7268;
+    --line:#dbe6df;
+    --red-600:#c23b3b;
+    --gold-500:#b8862f;
+    --gold-100:#fbf1de;
+    --shadow: 0 8px 24px rgba(8, 30, 20, 0.08);
+    --shadow-lg: 0 20px 50px rgba(8, 30, 20, 0.16);
+    --radius: 14px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family: "Söhne", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink-900);
+    line-height:1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .container{
+    max-width:1240px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- Top utility bar ---------- */
+  .utility-bar{
+    background: var(--forest-950);
+    color: var(--green-300);
+    font-size:12.5px;
+    letter-spacing:.02em;
+  }
+  .utility-bar .container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-top:8px;
+    padding-bottom:8px;
+  }
+  .utility-bar .ticker{
+    display:flex;
+    gap:22px;
+    overflow:hidden;
+    white-space:nowrap;
+  }
+  .utility-bar .ticker span{
+    color: rgba(234,251,241,.65);
+  }
+  .utility-bar .ticker b{
+    color:#fff;
+    font-weight:600;
+    margin-right:4px;
+  }
+  .utility-bar .up{color:var(--green-300);}
+  .utility-bar .down{color:#ff9b9b;}
+
+  /* ---------- Header ---------- */
+  header.main{
+    background: linear-gradient(180deg, var(--forest-900), var(--forest-800));
+    color:#fff;
+    position: sticky;
+    top:0;
+    z-index:50;
+    box-shadow: var(--shadow);
+  }
+  nav.main{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 0;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:700;
+    letter-spacing:-.01em;
+  }
+  .brand .mark{
+    width:34px; height:34px;
+    border-radius:9px;
+    background: radial-gradient(circle at 30% 30%, var(--green-400), var(--forest-600));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.15);
+  }
+  .brand .mark svg{width:19px; height:19px;}
+  .brand .sub{
+    display:block;
+    font-size:10.5px;
+    font-weight:500;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color: var(--green-300);
+    margin-top:1px;
+  }
+  .brand-text{display:flex; flex-direction:column; line-height:1.1;}
+
+  nav.main .links{
+    display:flex;
+    gap:34px;
+    font-size:14.5px;
+    font-weight:500;
+    color: rgba(255,255,255,.78);
+  }
+  nav.main .links a:hover{color:#fff;}
+  nav.main .links a.active{color:#fff;}
+
+  .nav-actions{display:flex; align-items:center; gap:14px;}
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:10px 18px;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition: all .15s ease;
+  }
+  .btn-ghost{
+    color:#fff;
+    border-color: rgba(255,255,255,.25);
+    background: transparent;
+  }
+  .btn-ghost:hover{background: rgba(255,255,255,.08);}
+  .btn-primary{
+    background: linear-gradient(180deg, var(--green-400), var(--green-500));
+    color:#06170f;
+    box-shadow: 0 1px 0 rgba(255,255,255,.25) inset, 0 6px 16px rgba(47,158,91,.35);
+  }
+  .btn-primary:hover{filter:brightness(1.05);}
+  .btn-buy{
+    width:100%;
+    background: linear-gradient(180deg, var(--green-400), var(--green-600, var(--green-500)));
+    color:#06170f;
+    padding:11px 16px;
+    font-size:14.5px;
+    box-shadow: 0 6px 14px rgba(47,158,91,.3);
+  }
+  .btn-buy:hover{ filter:brightness(1.06); transform: translateY(-1px); }
+  .btn-buy:active{ transform: translateY(0); }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:
+      radial-gradient(1200px 420px at 15% -10%, rgba(63,191,114,.18), transparent 60%),
+      radial-gradient(900px 400px at 90% 0%, rgba(63,191,114,.12), transparent 60%),
+      linear-gradient(180deg, var(--forest-800) 0%, var(--forest-900) 55%, var(--forest-950) 100%);
+    color:#fff;
+    padding: 64px 0 56px;
+  }
+  .hero .container{
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap:56px;
+    align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color: var(--green-300);
+    background: rgba(63,191,114,.12);
+    border:1px solid rgba(63,191,114,.35);
+    padding:6px 12px;
+    border-radius:100px;
+    margin-bottom:20px;
+  }
+  .hero h1{
+    font-size:44px;
+    line-height:1.12;
+    letter-spacing:-.02em;
+    margin:0 0 18px;
+    font-weight:700;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color: var(--green-300);
+  }
+  .hero p.lead{
+    font-size:16.5px;
+    color: rgba(255,255,255,.72);
+    max-width:520px;
+    margin:0 0 30px;
+  }
+  .hero-ctas{display:flex; gap:14px; margin-bottom:40px;}
+  .hero-stats{
+    display:flex;
+    gap:36px;
+  }
+  .hero-stats .stat b{
+    display:block;
+    font-size:24px;
+    font-weight:700;
+  }
+  .hero-stats .stat span{
+    font-size:12.5px;
+    color: rgba(255,255,255,.55);
+  }
+
+  /* Hero preview card */
+  .hero-card{
+    background: rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius: 18px;
+    padding:22px;
+    backdrop-filter: blur(6px);
+    box-shadow: var(--shadow-lg);
+  }
+  .hero-card .top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:6px;
+  }
+  .hero-card .top h3{margin:0; font-size:16px;}
+  .hero-card .top .loc{font-size:12.5px; color:rgba(255,255,255,.55); margin-top:3px;}
+  .hero-card .price-row{
+    display:flex; align-items:baseline; gap:10px; margin:14px 0 2px;
+  }
+  .hero-card .price-row .price{font-size:30px; font-weight:700;}
+  .hero-card .price-row .chg{font-size:14px; font-weight:600;}
+  .hero-card svg.spark{width:100%; height:100px; margin:10px 0 6px;}
+
+  /* ---------- Section headings ---------- */
+  .section{padding:56px 0;}
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:28px;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .section-head h2{
+    font-size:26px;
+    margin:0 0 6px;
+    letter-spacing:-.01em;
+  }
+  .section-head p{
+    margin:0; color:var(--ink-500); font-size:14.5px;
+  }
+  .head-controls{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:10px;
+  }
+  .filters{
+    display:flex; gap:8px;
+  }
+  .chip{
+    padding:8px 14px;
+    border-radius:100px;
+    font-size:13px;
+    font-weight:600;
+    border:1px solid var(--line);
+    background:#fff;
+    color: var(--ink-700);
+    cursor:pointer;
+  }
+  .chip.active{
+    background: var(--forest-800);
+    border-color: var(--forest-800);
+    color:#fff;
+  }
+
+  /* ---------- Search bar ---------- */
+  .search-bar{
+    position:relative;
+    width:280px;
+  }
+  .search-bar svg{
+    position:absolute;
+    left:12px;
+    top:50%;
+    transform: translateY(-50%);
+    width:16px; height:16px;
+    color: var(--ink-500);
+    pointer-events:none;
+  }
+  .search-bar input{
+    width:100%;
+    padding:10px 14px 10px 36px;
+    border-radius:9px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-size:13.5px;
+    font-family: inherit;
+    color: var(--ink-900);
+    outline:none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .search-bar input::placeholder{color: var(--ink-500); opacity:.85;}
+  .search-bar input:focus{
+    border-color: var(--green-500);
+    box-shadow: 0 0 0 3px rgba(47,158,91,.15);
+  }
+  .no-results{
+    grid-column: 1 / -1;
+    text-align:center;
+    padding:48px 20px;
+    color: var(--ink-500);
+    background:#fff;
+    border:1px dashed var(--line);
+    border-radius: var(--radius);
+    font-size:14.5px;
+  }
+
+  /* ---------- Bond grid ---------- */
+  .bond-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:20px;
+  }
+  .bond-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius: var(--radius);
+    padding:20px;
+    cursor:pointer;
+    transition: box-shadow .15s ease, transform .15s ease, border-color .15s ease;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .bond-card:hover{
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+    border-color: rgba(47,158,91,.4);
+  }
+  .bond-card.selected{
+    border-color: var(--green-500);
+    box-shadow: 0 0 0 3px rgba(47,158,91,.15), var(--shadow);
+  }
+  .bond-card .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .bond-card .card-top .ticker-name{
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.06em;
+    color: var(--green-600, var(--green-500));
+    background: var(--mint-100);
+    padding:3px 8px;
+    border-radius:6px;
+    display:inline-block;
+  }
+  .bond-card h3{
+    margin:8px 0 2px;
+    font-size:17px;
+  }
+  .bond-card .loc{
+    font-size:13px;
+    color: var(--ink-500);
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+  .badge-cert{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:11px;
+    font-weight:700;
+    color: var(--gold-500);
+    background: var(--gold-100);
+    border:1px solid rgba(184,134,47,.3);
+    padding:4px 9px;
+    border-radius:100px;
+    white-space:nowrap;
+  }
+  .badge-cert svg{width:11px; height:11px;}
+  .badge-pending{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:11px;
+    font-weight:700;
+    color: var(--ink-500);
+    background: #eef1ef;
+    border:1px solid var(--line);
+    padding:4px 9px;
+    border-radius:100px;
+    white-space:nowrap;
+  }
+
+  .bond-card .spark-wrap{
+    height:64px;
+  }
+  .bond-card svg.mini-spark{width:100%; height:100%;}
+
+  .bond-card .price-line{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+  }
+  .bond-card .price-line .price{
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:-.01em;
+  }
+  .bond-card .price-line .chg{
+    font-size:13.5px;
+    font-weight:600;
+    padding:3px 8px;
+    border-radius:6px;
+  }
+  .chg.up{color:var(--green-600, #1f7a45); background: rgba(47,158,91,.12);}
+  .chg.down{color:var(--red-600); background: rgba(194,59,59,.1);}
+
+  .bond-card .meta-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:12.5px;
+    color: var(--ink-500);
+    border-top:1px dashed var(--line);
+    padding-top:12px;
+  }
+  .bond-card .meta-row div b{
+    display:block;
+    color: var(--ink-900);
+    font-size:13.5px;
+    font-weight:700;
+  }
+
+  /* ---------- Detail / chart panel ---------- */
+  .detail-panel{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .detail-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:26px 28px 18px;
+    border-bottom:1px solid var(--line);
+    gap:24px;
+  }
+  .detail-head .id-block{display:flex; align-items:center; gap:14px;}
+  .detail-head .thumb{
+    width:52px; height:52px;
+    border-radius:12px;
+    background: linear-gradient(145deg, var(--green-300), var(--forest-600));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:700; font-size:15px;
+  }
+  .detail-head h2{margin:0 0 3px; font-size:21px;}
+  .detail-head .loc{font-size:13.5px; color:var(--ink-500); display:flex; align-items:center; gap:8px;}
+
+  .detail-price-block{text-align:right;}
+  .detail-price-block .price{font-size:32px; font-weight:700; letter-spacing:-.01em;}
+  .detail-price-block .chg{font-size:14.5px; font-weight:600; margin-top:2px;}
+
+  .detail-body{
+    display:grid;
+    grid-template-columns: 2.1fr 1fr;
+    gap:0;
+  }
+  .chart-area{
+    padding:22px 28px 28px;
+    border-right:1px solid var(--line);
+  }
+  .range-tabs{
+    display:flex; gap:6px; margin-bottom:14px;
+  }
+  .range-tab{
+    padding:6px 12px;
+    border-radius:8px;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink-500);
+    background:transparent;
+    border:1px solid transparent;
+    cursor:pointer;
+  }
+  .range-tab.active{
+    background: var(--mint-100);
+    color: var(--green-600, var(--green-500));
+  }
+  .big-chart{width:100%; height:280px; display:block;}
+  .chart-caption{
+    font-size:12.5px;
+    color:var(--ink-500);
+    margin-top:10px;
+  }
+
+  .side-stats{
+    padding:22px 28px 28px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .side-stats .stat-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:13.5px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+  }
+  .side-stats .stat-row span{color:var(--ink-500);}
+  .side-stats .stat-row b{font-weight:700;}
+  .side-stats .cert-block{
+    background: var(--gold-100);
+    border:1px solid rgba(184,134,47,.25);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:12.5px;
+    color: #6b4e17;
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .side-stats .cert-block svg{width:18px; height:18px; flex-shrink:0; margin-top:1px;}
+  .side-stats .no-cert-block{
+    background:#f3f5f3;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:12.5px;
+    color:var(--ink-500);
+  }
+  .side-stats .sensor-block{
+    background: var(--mint-100);
+    border:1px solid rgba(47,158,91,.25);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:12.5px;
+    color: var(--ink-700);
+  }
+  .side-stats .sensor-block h4{
+    margin:0 0 8px;
+    font-size:11.5px;
+    font-weight:700;
+    color: var(--forest-700);
+    text-transform:uppercase;
+    letter-spacing:.05em;
+  }
+  .side-stats .sensor-block ul{
+    margin:0 0 10px;
+    padding-left:18px;
+  }
+  .side-stats .sensor-block li{margin-bottom:4px;}
+  .side-stats .sensor-block .freq{
+    font-size:12px;
+    color: var(--ink-500);
+    padding-top:9px;
+    border-top:1px dashed rgba(47,158,91,.3);
+  }
+  .side-stats .sensor-block .freq b{color: var(--ink-700);}
+
+  /* ---------- How it works ---------- */
+  .how-grid{
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    gap:24px;
+  }
+  .how-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius: var(--radius);
+    padding:24px;
+  }
+  .how-card .num{
+    width:32px; height:32px;
+    border-radius:9px;
+    background: var(--forest-800);
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:14px;
+    margin-bottom:14px;
+  }
+  .how-card h3{margin:0 0 8px; font-size:16px;}
+  .how-card p{margin:0; font-size:13.5px; color:var(--ink-500);}
+
+  /* ---------- Trust strip ---------- */
+  .trust-strip{
+    background: var(--forest-900);
+    color: rgba(255,255,255,.75);
+    padding:36px 0;
+  }
+  .trust-strip .container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+  }
+  .trust-strip .item{
+    display:flex; align-items:center; gap:10px;
+    font-size:13.5px;
+  }
+  .trust-strip .item svg{width:20px; height:20px; color: var(--green-300);}
+
+  /* ---------- Footer ---------- */
+  footer{
+    background: var(--forest-950);
+    color: rgba(255,255,255,.55);
+    padding:40px 0 26px;
+    font-size:13px;
+  }
+  footer .container{
+    display:flex;
+    justify-content:space-between;
+    padding-bottom:24px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    flex-wrap:wrap;
+    gap:24px;
+  }
+  footer .cols{display:flex; gap:64px;}
+  footer .col h4{color:#fff; font-size:13px; margin:0 0 12px;}
+  footer .col a{display:block; color:rgba(255,255,255,.5); margin-bottom:9px;}
+  footer .col a:hover{color:#fff;}
+  footer .bottom{
+    display:flex; justify-content:space-between;
+    padding-top:20px;
+    font-size:12px;
+  }
+  footer .bottom .brand{color:rgba(255,255,255,.7); font-size:13px;}
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed;
+    bottom:28px;
+    left:50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--forest-900);
+    color:#fff;
+    padding:14px 22px;
+    border-radius:12px;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    box-shadow: var(--shadow-lg);
+    opacity:0;
+    pointer-events:none;
+    transition: all .25s ease;
+    z-index:100;
+    border:1px solid rgba(63,191,114,.4);
+  }
+  .toast.show{
+    opacity:1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast .dot{
+    width:22px;height:22px;border-radius:50%;
+    background: var(--green-500);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .toast .dot svg{width:12px;height:12px;}
+
+  @media (max-width: 980px){
+    .hero .container{grid-template-columns:1fr;}
+    .bond-grid{grid-template-columns: repeat(2,1fr);}
+    .detail-body{grid-template-columns:1fr;}
+    .chart-area{border-right:none; border-bottom:1px solid var(--line);}
+    .how-grid{grid-template-columns:1fr;}
+    nav.main .links{display:none;}
+    .head-controls{align-items:flex-start; width:100%;}
+    .search-bar{width:100%;}
+  }
+  @media (max-width: 640px){
+    .bond-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- Barra superior -->
+  <div class="utility-bar">
+    <div class="container">
+      <div class="ticker">
+        <span><b>MIS-01</b><span class="up">US$24.80 ▲0,9%</span></span>
+        <span><b>CHA-04</b><span class="down">US$18.15 ▼0,4%</span></span>
+        <span><b>DEL-07</b><span class="up">US$31.20 ▲2,1%</span></span>
+        <span><b>YUN-12</b><span class="up">US$27.65 ▲1,2%</span></span>
+        <span><b>PAT-09</b><span class="down">US$14.40 ▼0,6%</span></span>
+        <span><b>SPE-18</b><span class="up">US$19.40 ▲0,7%</span></span>
+        <span><b>SFE-22</b><span class="down">US$9.85 ▼0,3%</span></span>
+      </div>
+      <div>Bonos de Carbono Verificados — Liquidación en 2 días hábiles</div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="main">
+    <div class="container">
+      <nav class="main">
+        <div class="brand">
+          <div class="mark">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C7 6 4 10.5 4 14.5C4 18.6 7.6 22 12 22C16.4 22 20 18.6 20 14.5C20 10.5 17 6 12 2Z" fill="#eafbf1"/>
+              <path d="M12 22V11" stroke="#0f2e21" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            Soil Passport
+            <span class="sub">Bonos de Carbono Respaldados por Tierra</span>
+          </div>
+        </div>
+        <div class="links">
+          <a href="#marketplace" class="active">Mercado</a>
+          <a href="#how">Cómo funciona</a>
+          <a href="#trust">Verificación</a>
+          <a href="#">Mi cartera</a>
+          <a href="#">Novedades</a>
+        </div>
+        <div class="nav-actions">
+          <a class="btn btn-ghost">Iniciar sesión</a>
+          <a class="btn btn-primary">Abrir cuenta</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div>
+        <div class="eyebrow">● Mercado en vivo · 8 instrumentos respaldados por tierra</div>
+        <h1>Sé dueño de la tierra que <em>captura carbono</em>.</h1>
+        <p class="lead">Soil Passport convierte tierra verificada que captura carbono en bonos negociables. Seguí el historial de precios parcela por parcela, verificá la certificación Verra e invertí en el suelo que realmente saca CO₂ del aire.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" style="padding:13px 24px;">Explorar bonos</a>
+          <a class="btn btn-ghost" style="padding:13px 24px;">Ver metodología</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><b>US$182M</b><span>Bonos emitidos</span></div>
+          <div class="stat"><b>412K t</b><span>CO₂ bajo gestión</span></div>
+          <div class="stat"><b>5</b><span>Proyectos certificados Verra</span></div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="top">
+          <div>
+            <h3>Reserva Selva Misionera</h3>
+            <div class="loc">📍 Misiones, Argentina · Parcela MIS-01</div>
+          </div>
+          <span class="badge-cert">✔ Certificado Verra</span>
+        </div>
+        <div class="price-row">
+          <div class="price">US$24.80</div>
+          <div class="chg" style="color:var(--green-300);">▲ 0,90% hoy</div>
+        </div>
+        <svg class="spark" viewBox="0 0 300 100" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="heroFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3fbf72" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#3fbf72" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <polygon fill="url(#heroFill)" points="0,70 20,66 40,68 60,58 80,60 100,50 120,52 140,44 160,46 180,36 200,38 220,30 240,26 260,20 280,16 300,10 300,100 0,100"/>
+          <polyline fill="none" stroke="#6fd694" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            points="0,70 20,66 40,68 60,58 80,60 100,50 120,52 140,44 160,46 180,36 200,38 220,30 240,26 260,20 280,16 300,10"/>
+        </svg>
+        <div style="display:flex; justify-content:space-between; font-size:12px; color:rgba(255,255,255,.5);">
+          <span>Ene</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marketplace -->
+  <section class="section" id="marketplace">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Mercado de Bonos de Carbono</h2>
+          <p>Ocho parcelas argentinas, ocho perfiles de captura. Hacé clic en un bono para ver su historial completo.</p>
+        </div>
+        <div class="head-controls">
+          <div class="search-bar">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input type="text" id="tickerSearch" placeholder="Buscar por ticker (ej: MIS-01)" autocomplete="off">
+          </div>
+          <div class="filters">
+            <div class="chip active" data-filter="all">Todos los bonos</div>
+            <div class="chip" data-filter="certified">Certificados Verra</div>
+            <div class="chip" data-filter="gainers">Mayor suba</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bond-grid" id="bondGrid">
+        <!-- tarjetas generadas por JS a partir de datos precargados -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Detail panel -->
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="detail-panel" id="detailPanel"></div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section" id="how" style="background:#fff; border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Cómo funciona un bono Soil Passport</h2>
+          <p>Cada bono está respaldado por una parcela de tierra real y monitoreada.</p>
+        </div>
+      </div>
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="num">1</div>
+          <h3>Se mide la tierra</h3>
+          <p>Datos satelitales y de sensores de suelo estiman las toneladas de CO₂ capturadas por hectárea, actualizados mensualmente.</p>
+        </div>
+        <div class="how-card">
+          <div class="num">2</div>
+          <h3>Verificación independiente</h3>
+          <p>Algunas parcelas son auditadas por Verra y reciben una insignia de certificación bajo el estándar de carbono verificado.</p>
+        </div>
+        <div class="how-card">
+          <div class="num">3</div>
+          <h3>Comprás el bono</h3>
+          <p>El precio refleja el desempeño de captura y el estado de verificación. Comprá, mantené y seguilo como una acción.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust strip -->
+  <section class="trust-strip" id="trust">
+    <div class="container">
+      <div class="item">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4M12 21c-4.4-1.4-8-5.4-8-10V5l8-3 8 3v6c0 4.6-3.6 8.6-8 10z" stroke="currentColor" stroke-width="1.6"/></svg>
+        Certificación Verra (VCS) revisada trimestralmente
+      </div>
+      <div class="item">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h4l3 8 4-16 3 8h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Datos de captura monitoreados por satélite
+      </div>
+      <div class="item">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M7 7V5a2 2 0 012-2h6a2 2 0 012 2v2" stroke="currentColor" stroke-width="1.6"/></svg>
+        Liquidación custodiada de bonos, T+2
+      </div>
+      <div class="item">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="1.6"/></svg>
+        Esto es un mockup de demostración — no se realizan transacciones reales
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="cols">
+        <div class="col">
+          <h4>Mercado</h4>
+          <a href="#">Todos los bonos</a>
+          <a href="#">Certificados Verra</a>
+          <a href="#">Mayores movimientos</a>
+        </div>
+        <div class="col">
+          <h4>Compañía</h4>
+          <a href="#">Sobre Soil Passport</a>
+          <a href="#">Metodología</a>
+          <a href="#">Empleo</a>
+        </div>
+        <div class="col">
+          <h4>Legales</h4>
+          <a href="#">Términos</a>
+          <a href="#">Divulgación de riesgos</a>
+          <a href="#">Privacidad</a>
+        </div>
+      </div>
+    </div>
+    <div class="container bottom">
+      <div class="brand">🌱 Soil Passport</div>
+      <div>© 2026 Soil Passport S.A. — Mockup con fines demostrativos únicamente. No es una oferta real.</div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">
+    <div class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#06170f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div id="toastText">Orden realizada</div>
+  </div>
+
+<script>
+/* ---------------- Datos precargados de bonos (solo mockup) ---------------- */
+const BONDS = [
+  {
+    id: "MIS-01",
+    name: "Reserva Selva Misionera",
+    location: "Misiones, Argentina",
+    coords: "-26.8753° S, -54.5135° O",
+    hectares: "18.400 ha",
+    co2: "142.000 t CO₂",
+    price: 24.80,
+    change: 0.90,
+    volume: "12.340",
+    certified: true,
+    sensors: [
+      "Torres de flujo de CO₂ (eddy covariance)",
+      "Sensores de humedad y carbono orgánico del suelo",
+      "Imágenes satelitales multiespectrales (Sentinel-2 / Landsat 9)"
+    ],
+    frequency: "Satelital: mensual · Sensores terrestres: cada 15 días · Auditoría de campo: trimestral",
+    history: [16.2,16.8,17.4,17.1,18.0,18.9,19.6,20.3,21.0,20.6,21.8,22.5,23.1,23.8,24.3,24.80]
+  },
+  {
+    id: "CHA-04",
+    name: "Bosque del Impenetrable",
+    location: "Chaco, Argentina",
+    coords: "-25.5000° S, -61.6000° O",
+    hectares: "24.900 ha",
+    co2: "198.500 t CO₂",
+    price: 18.15,
+    change: -0.40,
+    volume: "8.015",
+    certified: true,
+    sensors: [
+      "Torres de flujo de CO₂ (eddy covariance)",
+      "Sensores de humedad y carbono orgánico del suelo",
+      "Imágenes satelitales multiespectrales (Sentinel-2 / Landsat 9)"
+    ],
+    frequency: "Satelital: mensual · Sensores terrestres: cada 15 días · Auditoría de campo: trimestral",
+    history: [14.0,14.6,15.1,15.6,16.0,16.4,17.0,17.6,17.2,17.9,18.4,18.9,18.6,18.3,18.2,18.15]
+  },
+  {
+    id: "DEL-07",
+    name: "Humedales del Delta del Paraná",
+    location: "Entre Ríos, Argentina",
+    coords: "-33.9000° S, -58.8500° O",
+    hectares: "9.200 ha",
+    co2: "87.300 t CO₂",
+    price: 31.20,
+    change: 2.10,
+    volume: "15.760",
+    certified: true,
+    sensors: [
+      "Sensores de nivel de agua y humedad del suelo",
+      "Muestreo de biomasa y carbono en turba",
+      "Imágenes satelitales multiespectrales (Sentinel-2)"
+    ],
+    frequency: "Satelital: mensual · Sensores de nivel de agua: diario · Auditoría de campo: trimestral",
+    history: [19.5,20.1,21.0,21.8,22.5,23.6,24.4,25.5,26.7,27.9,28.6,29.4,29.9,30.5,30.6,31.20]
+  },
+  {
+    id: "YUN-12",
+    name: "Yungas Salteñas",
+    location: "Salta, Argentina",
+    coords: "-23.7000° S, -64.6500° O",
+    hectares: "6.700 ha",
+    co2: "54.100 t CO₂",
+    price: 27.65,
+    change: 1.20,
+    volume: "6.420",
+    certified: true,
+    sensors: [
+      "Torres de flujo de CO₂ (eddy covariance)",
+      "Sensores de humedad y carbono orgánico del suelo",
+      "Imágenes satelitales multiespectrales (Sentinel-2 / Landsat 9)"
+    ],
+    frequency: "Satelital: mensual · Sensores terrestres: cada 15 días · Auditoría de campo: trimestral",
+    history: [17.8,18.2,18.9,19.4,20.1,20.9,21.6,22.4,23.5,24.3,25.1,26.0,26.5,27.1,27.3,27.65]
+  },
+  {
+    id: "PAT-09",
+    name: "Bosque Andino Patagónico",
+    location: "Neuquén, Argentina",
+    coords: "-40.1500° S, -71.3500° O",
+    hectares: "31.500 ha",
+    co2: "121.900 t CO₂",
+    price: 14.40,
+    change: -0.60,
+    volume: "4.180",
+    certified: false,
+    sensors: [
+      "Torres de flujo de CO₂ (eddy covariance)",
+      "Sensores de humedad y carbono orgánico del suelo",
+      "Imágenes satelitales multiespectrales (Sentinel-2 / Landsat 9)"
+    ],
+    frequency: "Satelital: mensual · Sensores terrestres: cada 15 días · Auditoría de campo: trimestral (en proceso de certificación)",
+    history: [11.0,11.4,11.8,12.1,12.6,13.0,13.4,13.9,14.3,14.6,14.9,14.7,14.6,14.5,14.45,14.40]
+  },
+  {
+    id: "IBE-15",
+    name: "Esteros del Iberá",
+    location: "Corrientes, Argentina",
+    coords: "-28.5000° S, -57.3000° O",
+    hectares: "5.100 ha",
+    co2: "38.600 t CO₂",
+    price: 12.95,
+    change: 0.35,
+    volume: "3.050",
+    certified: false,
+    sensors: [
+      "Sensores de nivel de agua y humedad del suelo",
+      "Muestreo de biomasa y carbono en turba",
+      "Imágenes satelitales multiespectrales (Sentinel-2)"
+    ],
+    frequency: "Satelital: mensual · Sensores de nivel de agua: diario · Auditoría de campo: trimestral (en proceso de certificación)",
+    history: [10.2,10.4,10.7,10.9,11.2,11.5,11.8,12.0,12.2,12.4,12.5,12.6,12.7,12.8,12.9,12.95]
+  },
+  {
+    id: "SPE-18",
+    name: "Chacras San Pedro",
+    location: "San Pedro, Buenos Aires, Argentina",
+    coords: "-33.6800° S, -59.6600° O",
+    hectares: "3.200 ha",
+    co2: "21.400 t CO₂",
+    price: 19.40,
+    change: 0.70,
+    volume: "5.230",
+    certified: true,
+    sensors: [
+      "Sensores de carbono orgánico y humedad del suelo",
+      "Muestreo de suelo geo-referenciado (grillas de 1 ha)",
+      "Imágenes satelitales multiespectrales (Sentinel-2) para NDVI y cobertura vegetal"
+    ],
+    frequency: "Satelital: mensual · Muestreo de suelo: semestral · Auditoría de campo: anual",
+    history: [14.8,15.1,15.5,15.9,16.2,16.6,17.0,17.4,17.7,18.0,18.4,18.7,18.9,19.1,19.25,19.40]
+  },
+  {
+    id: "SFE-22",
+    name: "Pampa Santa Fe",
+    location: "Santa Fe, Argentina",
+    coords: "-31.9000° S, -60.9500° O",
+    hectares: "42.000 ha",
+    co2: "89.700 t CO₂",
+    price: 9.85,
+    change: -0.30,
+    volume: "7.640",
+    certified: false,
+    sensors: [
+      "Sensores de carbono orgánico y humedad del suelo",
+      "Muestreo de suelo geo-referenciado (grillas de 1 ha)",
+      "Imágenes satelitales multiespectrales (Sentinel-2) para NDVI y cobertura vegetal"
+    ],
+    frequency: "Satelital: mensual · Muestreo de suelo: semestral · Auditoría de campo: anual (en proceso de certificación)",
+    history: [8.4,8.6,8.9,9.3,9.6,9.9,10.2,10.5,10.3,10.6,10.4,10.1,9.9,10.0,9.9,9.85]
+  }
+];
+
+function fmt(n){ return n.toFixed(2); }
+
+function buildPath(history, w, h, pad){
+  const min = Math.min(...history);
+  const max = Math.max(...history);
+  const range = (max - min) || 1;
+  const stepX = (w - pad*2) / (history.length - 1);
+  const pts = history.map((v,i) => {
+    const x = pad + i*stepX;
+    const y = pad + (h - pad*2) * (1 - (v - min) / range);
+    return [x,y];
+  });
+  const line = pts.map(p => p.join(",")).join(" ");
+  const area = `${pad},${h-pad} ` + line + ` ${pad + stepX*(history.length-1)},${h-pad}`;
+  return { line, area };
+}
+
+function miniSpark(bond, uid){
+  const up = bond.change >= 0;
+  const color = up ? "#2f9e5b" : "#c23b3b";
+  const { line, area } = buildPath(bond.history, 240, 64, 4);
+  return `
+  <svg class="mini-spark" viewBox="0 0 240 64" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="fill-${uid}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity="0.22"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <polygon fill="url(#fill-${uid})" points="${area}"/>
+    <polyline fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${line}"/>
+  </svg>`;
+}
+
+function bigChart(bond){
+  const up = bond.change >= 0;
+  const color = up ? "#2f9e5b" : "#c23b3b";
+  const w = 900, h = 280, padLeft = 62, padRight = 20, padY = 20;
+  const min = Math.min(...bond.history), max = Math.max(...bond.history);
+  const range = (max - min) || 1;
+  const stepX = (w - padLeft - padRight) / (bond.history.length - 1);
+  const dots = bond.history.map((v,i) => {
+    const x = padLeft + i*stepX;
+    const y = padY + (h - padY*2) * (1 - (v - min)/range);
+    return {x,y};
+  });
+  const line = dots.map(p => `${p.x},${p.y}`).join(" ");
+  const area = `${padLeft},${h-padY} ` + line + ` ${padLeft + stepX*(bond.history.length-1)},${h-padY}`;
+  const last = dots[dots.length-1];
+  const gridCount = 4;
+  const gridLines = Array.from({length: gridCount+1}, (_, i) => {
+    const y = padY + i*(h - padY*2)/gridCount;
+    const price = max - range*(i/gridCount);
+    return { y, price };
+  });
+  return `
+  <svg class="big-chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="bigFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity="0.20"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    ${gridLines.map(g => `
+      <line x1="${padLeft}" x2="${w-padRight}" y1="${g.y}" y2="${g.y}" stroke="#e7ede9" stroke-width="1"/>
+      <text x="${padLeft-10}" y="${g.y+4}" font-size="12" fill="#5c7268" text-anchor="end">US$${fmt(g.price)}</text>
+    `).join("")}
+    <polygon fill="url(#bigFill)" points="${area}"/>
+    <polyline fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${line}"/>
+    <circle cx="${last.x}" cy="${last.y}" r="4.5" fill="${color}"/>
+    <circle cx="${last.x}" cy="${last.y}" r="8" fill="${color}" opacity="0.2"/>
+    <text x="${last.x-12}" y="${last.y-14}" font-size="13" font-weight="700" fill="${color}" text-anchor="end">US$${fmt(bond.price)}</text>
+  </svg>`;
+}
+
+function certBadge(bond){
+  if(bond.certified){
+    return `<span class="badge-cert" title="Verificado por Verra (VCS)">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4M12 21c-4.4-1.4-8-5.4-8-10V5l8-3 8 3v6c0 4.6-3.6 8.6-8 10z" stroke="currentColor" stroke-width="2"/></svg>
+      Certificado Verra
+    </span>`;
+  }
+  return `<span class="badge-pending">Certificación pendiente</span>`;
+}
+
+let selected = BONDS[0].id;
+let activeFilter = "all";
+let searchQuery = "";
+
+function getFilteredBonds(){
+  return BONDS.filter(b => {
+    if(searchQuery && !b.id.toLowerCase().includes(searchQuery)) return false;
+    if(activeFilter === "certified" && !b.certified) return false;
+    if(activeFilter === "gainers" && b.change < 0) return false;
+    return true;
+  });
+}
+
+function renderGrid(){
+  const grid = document.getElementById("bondGrid");
+  const filtered = getFilteredBonds();
+
+  if(filtered.length === 0){
+    grid.innerHTML = `<div class="no-results">No se encontraron bonos que coincidan con "${searchQuery.toUpperCase()}". Probá con otro ticker, por ejemplo MIS-01 o CHA-04.</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((b, idx) => {
+    const up = b.change >= 0;
+    return `
+    <div class="bond-card ${b.id===selected ? 'selected':''}" data-id="${b.id}">
+      <div class="card-top">
+        <div>
+          <span class="ticker-name">${b.id}</span>
+          <h3>${b.name}</h3>
+          <div class="loc">📍 ${b.location}</div>
+        </div>
+        ${certBadge(b)}
+      </div>
+      <div class="spark-wrap">${miniSpark(b, idx)}</div>
+      <div class="price-line">
+        <div class="price">US$${fmt(b.price)}</div>
+        <div class="chg ${up?'up':'down'}">${up?'▲':'▼'} ${Math.abs(b.change).toFixed(2)}%</div>
+      </div>
+      <div class="meta-row">
+        <div><b>${b.co2}</b>capturado</div>
+        <div><b>${b.hectares}</b>superficie</div>
+        <div><b>${b.volume}</b>vol. operado</div>
+      </div>
+      <button class="btn btn-buy" data-buy="${b.id}">Comprar bono — US$${fmt(b.price)}</button>
+    </div>`;
+  }).join("");
+}
+
+function renderDetail(bondId){
+  const b = BONDS.find(x => x.id === bondId) || BONDS[0];
+  const up = b.change >= 0;
+  const panel = document.getElementById("detailPanel");
+  panel.innerHTML = `
+    <div class="detail-head">
+      <div class="id-block">
+        <div class="thumb">${b.id.slice(0,2)}</div>
+        <div>
+          <h2>${b.name} <span style="color:var(--ink-500); font-weight:500; font-size:14px;">(${b.id})</span></h2>
+          <div class="loc">📍 ${b.location} · ${b.coords} &nbsp;·&nbsp; ${certBadge(b)}</div>
+        </div>
+      </div>
+      <div class="detail-price-block">
+        <div class="price">US$${fmt(b.price)}</div>
+        <div class="chg" style="color:${up?'#1f7a45':'#c23b3b'}">${up?'▲':'▼'} ${Math.abs(b.change).toFixed(2)}% hoy</div>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="chart-area">
+        <div class="range-tabs">
+          <div class="range-tab">1M</div>
+          <div class="range-tab">3M</div>
+          <div class="range-tab active">1A</div>
+          <div class="range-tab">5A</div>
+          <div class="range-tab">MÁX</div>
+        </div>
+        ${bigChart(b)}
+        <div class="chart-caption">El historial de precios refleja el valor modelado de captura de CO₂ de esta parcela durante los últimos 16 meses. Los datos históricos son ilustrativos para este mockup.</div>
+      </div>
+      <div class="side-stats">
+        <div class="stat-row"><span>Coordenadas del terreno</span><b>${b.coords}</b></div>
+        <div class="stat-row"><span>Superficie</span><b>${b.hectares}</b></div>
+        <div class="stat-row"><span>CO₂ capturado a la fecha</span><b>${b.co2}</b></div>
+        <div class="stat-row"><span>Volumen operado</span><b>${b.volume} bonos</b></div>
+        <div class="stat-row"><span>Rango de 52 semanas</span><b>US$${fmt(Math.min(...b.history))} – US$${fmt(Math.max(...b.history))}</b></div>
+        <div class="sensor-block">
+          <h4>Metodología de medición</h4>
+          <ul>
+            ${b.sensors.map(s => `<li>${s}</li>`).join("")}
+          </ul>
+          <div class="freq"><b>Periodicidad:</b> ${b.frequency}</div>
+        </div>
+        ${b.certified ? `
+        <div class="cert-block">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4M12 21c-4.4-1.4-8-5.4-8-10V5l8-3 8 3v6c0 4.6-3.6 8.6-8 10z" stroke="currentColor" stroke-width="1.8"/></svg>
+          <div><b>Certificado Verra (VCS)</b><br>La captura de esta parcela fue verificada de forma independiente bajo el Estándar de Carbono Verificado.</div>
+        </div>` : `
+        <div class="no-cert-block">La certificación Verra está en trámite para esta parcela. El precio refleja captura modelada, aún no verificada de forma independiente.</div>
+        `}
+        <button class="btn btn-buy" data-buy="${b.id}">Comprar ${b.id} — US$${fmt(b.price)}</button>
+      </div>
+    </div>
+  `;
+}
+
+renderGrid();
+renderDetail(selected);
+
+document.getElementById("bondGrid").addEventListener("click", (e) => {
+  const buyBtn = e.target.closest("[data-buy]");
+  if(buyBtn){
+    e.stopPropagation();
+    showToast(buyBtn.getAttribute("data-buy"));
+    return;
+  }
+  const card = e.target.closest(".bond-card");
+  if(card){
+    selected = card.getAttribute("data-id");
+    renderGrid();
+    renderDetail(selected);
+    document.getElementById("detailPanel").scrollIntoView({behavior:"smooth", block:"center"});
+  }
+});
+
+document.getElementById("detailPanel").addEventListener("click", (e) => {
+  const buyBtn = e.target.closest("[data-buy]");
+  if(buyBtn){
+    showToast(buyBtn.getAttribute("data-buy"));
+  }
+});
+
+document.getElementById("tickerSearch").addEventListener("input", (e) => {
+  searchQuery = e.target.value.trim().toLowerCase();
+  renderGrid();
+});
+
+document.querySelectorAll(".chip[data-filter]").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll(".chip[data-filter]").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    activeFilter = chip.getAttribute("data-filter");
+    renderGrid();
+  });
+});
+
+function showToast(bondId){
+  const b = BONDS.find(x => x.id === bondId);
+  const toast = document.getElementById("toast");
+  document.getElementById("toastText").textContent = `Orden realizada: 1 bono de ${b.name} a US$${fmt(b.price)}`;
+  toast.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => toast.classList.remove("show"), 2800);
+}
+</script>
+</body>
+</html>
